@@ -228,7 +228,9 @@ gameDecoder =
 view : Model -> Html Msg
 view model =
     div []
-        [ h2 [] [ text "IMPredict (tokens only • demo)" ]
+        [ h2 [] [ text "bet me if you can (demo)" ]
+        -- updated title to match page branding
+        , div [ class "muted", style "margin-bottom" "8px" ] [ text "bet me if you can • demo" ]
         , case model.error of
             Just e ->
                 div [ class "card" ]
@@ -251,24 +253,24 @@ viewList : List Game -> Html Msg
 viewList games =
     div []
         [ h3 [] [ text "Games" ]
-        , button [ onClick GoList ] [ text "Refresh" ]
+    , button [ onClick GoList, class "button" ] [ text "refresh" ]
         , div []
             (List.map
                 (\g ->
-                    div [ class "card" ]
-                        [ div [] [ strong [] [ text (g.sport ++ ": " ++ g.home ++ " vs " ++ g.away) ] ]
-                        , div [ class "muted" ] [ text ("Starts: " ++ g.start_time) ]
-                        , div [] [ text ("Status: " ++ g.status) ]
-                        , div [] [ text ("Pools H/A/D: "
-                                ++ String.fromInt g.home_pool_tokens ++ " / "
-                                ++ String.fromInt g.away_pool_tokens ++ " / "
-                                ++ String.fromInt g.draw_pool_tokens) ]
-                        , div [] [ text ("Implied odds H/A/D: "
-                                ++ pct g.home_odds ++ " / "
-                                ++ pct g.away_odds ++ " / "
-                                ++ pct g.draw_odds) ]
-                        , button [ onClick (GoDetail g.id), style "margin-top" "6px" ] [ text "Open" ]
-                        ]
+            div [ class "card" ]
+            [ div [] [ strong [] [ text (g.sport ++ ": " ++ g.home ++ " vs " ++ g.away) ] ]
+            , div [ class "muted" ] [ text ("starts: " ++ g.start_time) ]
+            , div [ class "muted" ] [ text ("status: " ++ String.toLower g.status) ]
+            , div [] [ text ("pools h/a/d: "
+                ++ String.fromInt g.home_pool_tokens ++ " / "
+                ++ String.fromInt g.away_pool_tokens ++ " / "
+                ++ String.fromInt g.draw_pool_tokens) ]
+            , div [] [ text ("implied odds h/a/d: "
+                ++ pct g.home_odds ++ " / "
+                ++ pct g.away_odds ++ " / "
+                ++ pct g.draw_odds) ]
+            , button [ onClick (GoDetail g.id), style "margin-top" "6px", class "button" ] [ text "open" ]
+            ]
                 )
                 games
             )
@@ -279,37 +281,38 @@ viewDetail : Int -> Model -> Html Msg
 viewDetail gid model =
     case model.selected of
         Nothing ->
-            div [] [ button [ onClick GoList ] [ text "← Back" ], text " Loading..." ]
+            div [] [ button [ onClick GoList, class "button" ] [ text "← back" ], text " loading..." ]
 
         Just g ->
             div []
-                [ button [ onClick GoList ] [ text "← Back" ]
+                [ button [ onClick GoList, class "button" ] [ text "← back" ]
                 , h3 [] [ text (g.sport ++ ": " ++ g.home ++ " vs " ++ g.away) ]
-                , div [] [ text ("Status: " ++ g.status) ]
-                , div [] [ text ("Pools H/A/D: "
+                , div [ class "muted" ] [ text ("status: " ++ String.toLower g.status) ]
+                , div [] [ text ("pools h/a/d: "
                         ++ String.fromInt g.home_pool_tokens ++ " / "
                         ++ String.fromInt g.away_pool_tokens ++ " / "
                         ++ String.fromInt g.draw_pool_tokens) ]
-                , div [] [ text ("Implied odds H/A/D: "
+                , div [] [ text ("implied odds h/a/d: "
                         ++ pct g.home_odds ++ " / "
                         ++ pct g.away_odds ++ " / "
                         ++ pct g.draw_odds) ]
                 , div [ style "margin-top" "10px" ]
-                    [ label [] [ text "Pick: " ]
-                    , select [ onInput SetSelection ]
-                        [ option [ value "home", selected (model.selection == "home") ] [ text "Home" ]
-                        , option [ value "away", selected (model.selection == "away") ] [ text "Away" ]
-                        , option [ value "draw", selected (model.selection == "draw") ] [ text "Draw" ]
+                    [ label [] [ text "pick" ]
+                    , select [ onInput SetSelection, style "margin-left" "6px" ]
+                        [ option [ value "home", selected (model.selection == "home") ] [ text "home" ]
+                        , option [ value "away", selected (model.selection == "away") ] [ text "away" ]
+                        , option [ value "draw", selected (model.selection == "draw") ] [ text "draw" ]
                         ]
-                    , label [ style "margin-left" "8px" ] [ text "Stake: " ]
+                    , label [ style "margin-left" "12px" ] [ text "stake" ]
                     , input
                         [ type_ "number"
                         , value model.stake
                         , onInput SetStake
                         , Attrs.min "1"  -- disambiguate `min`
+                        , style "margin-left" "6px", style "width" "100px"
                         ]
                         []
-                    , button [ onClick PlaceBet, style "margin-left" "8px" ] [ text "Place Bet" ]
+                    , button [ onClick PlaceBet, style "margin-left" "8px", class "button" ] [ text "place bet" ]
                     ]
                 ]
 

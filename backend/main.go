@@ -12,12 +12,14 @@ import (
 )
 
 type GameStatus string
+
 const (
 	StatusPre  GameStatus = "PreGame"
 	StatusDone GameStatus = "Settled"
 )
 
 type Selection string
+
 const (
 	SelHome Selection = "home"
 	SelAway Selection = "away"
@@ -79,8 +81,8 @@ func newStore() *store {
 	s.games[101] = &Game{
 		ID:        101,
 		Sport:     "Flag Football",
-		Home:      "Dorm A",
-		Away:      "Dorm B",
+		Home:      "Welsh Fam Whirls",
+		Away:      "Lewis Chicks",
 		StartTime: now,
 		Status:    StatusPre,
 		HomePool:  100, AwayPool: 100, DrawPool: 0,
@@ -88,8 +90,17 @@ func newStore() *store {
 	s.games[102] = &Game{
 		ID:        102,
 		Sport:     "Soccer",
-		Home:      "Keough",
+		Home:      "Alumni",
 		Away:      "Dillon",
+		StartTime: time.Now().Add(90 * time.Minute).Format(time.RFC3339),
+		Status:    StatusPre,
+		HomePool:  150, AwayPool: 120, DrawPool: 30,
+	}
+	s.games[103] = &Game{
+		ID:        103,
+		Sport:     "Volleyball",
+		Home:      "Cat Food",
+		Away:      "Kiss My Ace",
 		StartTime: time.Now().Add(90 * time.Minute).Format(time.RFC3339),
 		Status:    StatusPre,
 		HomePool:  150, AwayPool: 120, DrawPool: 30,
@@ -222,7 +233,7 @@ func addOdds(g *Game) {
 	}
 	g.HomeOdds = float64(g.HomePool) / total
 	g.AwayOdds = float64(g.AwayPool) / total
-	g.DrawOdds  = float64(g.DrawPool) / total
+	g.DrawOdds = float64(g.DrawPool) / total
 }
 
 var st = newStore()
@@ -241,12 +252,15 @@ func main() {
 func allowCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		origin := r.Header.Get("Origin")
-		if origin == "" { origin = "*" }
+		if origin == "" {
+			origin = "*"
+		}
 		w.Header().Set("Access-Control-Allow-Origin", origin)
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Admin-Key")
 		w.Header().Set("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
 		if r.Method == http.MethodOptions {
-			w.WriteHeader(http.StatusNoContent); return
+			w.WriteHeader(http.StatusNoContent)
+			return
 		}
 		next.ServeHTTP(w, r)
 	})
@@ -254,20 +268,30 @@ func allowCORS(next http.Handler) http.Handler {
 
 func handleGames(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		writeJSON(w, http.StatusOK, st.listGames()); return
+		writeJSON(w, http.StatusOK, st.listGames())
+		return
 	}
 	http.Error(w, "method_not_allowed", http.StatusMethodNotAllowed)
 }
 
 func handleGameByID(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(strings.TrimPrefix(r.URL.Path, "/api/games/"), "/")
-	if len(parts) == 0 || parts[0] == "" { http.NotFound(w, r); return }
+	if len(parts) == 0 || parts[0] == "" {
+		http.NotFound(w, r)
+		return
+	}
 	id, err := strconv.ParseInt(parts[0], 10, 64)
-	if err != nil { http.Error(w, "bad_id", http.StatusBadRequest); return }
+	if err != nil {
+		http.Error(w, "bad_id", http.StatusBadRequest)
+		return
+	}
 
 	if len(parts) == 1 && r.Method == http.MethodGet {
 		g, ok := st.getGame(id)
-		if !ok { http.NotFound(w, r); return }
+		if !ok {
+			http.NotFound(w, r)
+			return
+		}
 		writeJSON(w, http.StatusOK, g)
 		return
 	}
@@ -279,23 +303,34 @@ func handleGameByID(w http.ResponseWriter, r *http.Request) {
 			Stake     int64     `json:"stake"`
 		}
 		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-			http.Error(w, "bad_json", http.StatusBadRequest); return
+			http.Error(w, "bad_json", http.StatusBadRequest)
+			return
 		}
 		b, wlt, g, err := st.placeBet(body.UserID, id, body.Selection, body.Stake)
-		if err != nil { http.Error(w, err.Error(), http.StatusBadRequest); return }
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
 		writeJSON(w, http.StatusOK, map[string]any{"bet": b, "wallet": wlt, "game": g})
 		return
 	}
 
 	if len(parts) == 2 && parts[1] == "settle" && r.Method == http.MethodPost {
-		var body struct{ Result Selection `json:"result"` }
+		var body struct {
+			Result Selection `json:"result"`
+		}
 		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-			http.Error(w, "bad_json", http.StatusBadRequest); return
+			http.Error(w, "bad_json", http.StatusBadRequest)
+			return
 		}
 		key := r.Header.Get("X-Admin-Key")
 		g, err := st.settle(key, id, body.Result)
-		if err != nil { http.Error(w, err.Error(), http.StatusForbidden); return }
-		writeJSON(w, http.StatusOK, g); return
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusForbidden)
+			return
+		}
+		writeJSON(w, http.StatusOK, g)
+		return
 	}
 
 	http.Error(w, "not_found", http.StatusNotFound)
@@ -308,4 +343,3 @@ func writeJSON(w http.ResponseWriter, code int, v any) {
 	enc.SetIndent("", "  ")
 	_ = enc.Encode(v)
 }
-

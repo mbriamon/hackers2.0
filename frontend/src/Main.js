@@ -6495,6 +6495,7 @@ var $elm$html$Html$Attributes$boolProperty = F2(
 			$elm$json$Json$Encode$bool(bool));
 	});
 var $elm$html$Html$Attributes$selected = $elm$html$Html$Attributes$boolProperty('selected');
+var $elm$core$String$toLower = _String_toLower;
 var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$Main$viewDetail = F2(
@@ -6510,13 +6511,14 @@ var $author$project$Main$viewDetail = F2(
 						$elm$html$Html$button,
 						_List_fromArray(
 							[
-								$elm$html$Html$Events$onClick($author$project$Main$GoList)
+								$elm$html$Html$Events$onClick($author$project$Main$GoList),
+								$elm$html$Html$Attributes$class('button')
 							]),
 						_List_fromArray(
 							[
-								$elm$html$Html$text('← Back')
+								$elm$html$Html$text('← back')
 							])),
-						$elm$html$Html$text(' Loading...')
+						$elm$html$Html$text(' loading...')
 					]));
 		} else {
 			var g = _v0.a;
@@ -6529,11 +6531,12 @@ var $author$project$Main$viewDetail = F2(
 						$elm$html$Html$button,
 						_List_fromArray(
 							[
-								$elm$html$Html$Events$onClick($author$project$Main$GoList)
+								$elm$html$Html$Events$onClick($author$project$Main$GoList),
+								$elm$html$Html$Attributes$class('button')
 							]),
 						_List_fromArray(
 							[
-								$elm$html$Html$text('← Back')
+								$elm$html$Html$text('← back')
 							])),
 						A2(
 						$elm$html$Html$h3,
@@ -6544,10 +6547,14 @@ var $author$project$Main$viewDetail = F2(
 							])),
 						A2(
 						$elm$html$Html$div,
-						_List_Nil,
 						_List_fromArray(
 							[
-								$elm$html$Html$text('Status: ' + g.status)
+								$elm$html$Html$Attributes$class('muted')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								'status: ' + $elm$core$String$toLower(g.status))
 							])),
 						A2(
 						$elm$html$Html$div,
@@ -6555,7 +6562,7 @@ var $author$project$Main$viewDetail = F2(
 						_List_fromArray(
 							[
 								$elm$html$Html$text(
-								'Pools H/A/D: ' + ($elm$core$String$fromInt(g.home_pool_tokens) + (' / ' + ($elm$core$String$fromInt(g.away_pool_tokens) + (' / ' + $elm$core$String$fromInt(g.draw_pool_tokens))))))
+								'pools h/a/d: ' + ($elm$core$String$fromInt(g.home_pool_tokens) + (' / ' + ($elm$core$String$fromInt(g.away_pool_tokens) + (' / ' + $elm$core$String$fromInt(g.draw_pool_tokens))))))
 							])),
 						A2(
 						$elm$html$Html$div,
@@ -6563,7 +6570,7 @@ var $author$project$Main$viewDetail = F2(
 						_List_fromArray(
 							[
 								$elm$html$Html$text(
-								'Implied odds H/A/D: ' + ($author$project$Main$pct(g.home_odds) + (' / ' + ($author$project$Main$pct(g.away_odds) + (' / ' + $author$project$Main$pct(g.draw_odds))))))
+								'implied odds h/a/d: ' + ($author$project$Main$pct(g.home_odds) + (' / ' + ($author$project$Main$pct(g.away_odds) + (' / ' + $author$project$Main$pct(g.draw_odds))))))
 							])),
 						A2(
 						$elm$html$Html$div,
@@ -6578,13 +6585,14 @@ var $author$project$Main$viewDetail = F2(
 								_List_Nil,
 								_List_fromArray(
 									[
-										$elm$html$Html$text('Pick: ')
+										$elm$html$Html$text('pick')
 									])),
 								A2(
 								$elm$html$Html$select,
 								_List_fromArray(
 									[
-										$elm$html$Html$Events$onInput($author$project$Main$SetSelection)
+										$elm$html$Html$Events$onInput($author$project$Main$SetSelection),
+										A2($elm$html$Html$Attributes$style, 'margin-left', '6px')
 									]),
 								_List_fromArray(
 									[
@@ -6597,7 +6605,7 @@ var $author$project$Main$viewDetail = F2(
 											]),
 										_List_fromArray(
 											[
-												$elm$html$Html$text('Home')
+												$elm$html$Html$text('home')
 											])),
 										A2(
 										$elm$html$Html$option,
@@ -6608,7 +6616,7 @@ var $author$project$Main$viewDetail = F2(
 											]),
 										_List_fromArray(
 											[
-												$elm$html$Html$text('Away')
+												$elm$html$Html$text('away')
 											])),
 										A2(
 										$elm$html$Html$option,
@@ -6619,18 +6627,18 @@ var $author$project$Main$viewDetail = F2(
 											]),
 										_List_fromArray(
 											[
-												$elm$html$Html$text('Draw')
+												$elm$html$Html$text('draw')
 											]))
 									])),
 								A2(
 								$elm$html$Html$label,
 								_List_fromArray(
 									[
-										A2($elm$html$Html$Attributes$style, 'margin-left', '8px')
+										A2($elm$html$Html$Attributes$style, 'margin-left', '12px')
 									]),
 								_List_fromArray(
 									[
-										$elm$html$Html$text('Stake: ')
+										$elm$html$Html$text('stake')
 									])),
 								A2(
 								$elm$html$Html$input,
@@ -6639,7 +6647,9 @@ var $author$project$Main$viewDetail = F2(
 										$elm$html$Html$Attributes$type_('number'),
 										$elm$html$Html$Attributes$value(model.stake),
 										$elm$html$Html$Events$onInput($author$project$Main$SetStake),
-										$elm$html$Html$Attributes$min('1')
+										$elm$html$Html$Attributes$min('1'),
+										A2($elm$html$Html$Attributes$style, 'margin-left', '6px'),
+										A2($elm$html$Html$Attributes$style, 'width', '100px')
 									]),
 								_List_Nil),
 								A2(
@@ -6647,11 +6657,12 @@ var $author$project$Main$viewDetail = F2(
 								_List_fromArray(
 									[
 										$elm$html$Html$Events$onClick($author$project$Main$PlaceBet),
-										A2($elm$html$Html$Attributes$style, 'margin-left', '8px')
+										A2($elm$html$Html$Attributes$style, 'margin-left', '8px'),
+										$elm$html$Html$Attributes$class('button')
 									]),
 								_List_fromArray(
 									[
-										$elm$html$Html$text('Place Bet')
+										$elm$html$Html$text('place bet')
 									]))
 							]))
 					]));
@@ -6678,11 +6689,12 @@ var $author$project$Main$viewList = function (games) {
 				$elm$html$Html$button,
 				_List_fromArray(
 					[
-						$elm$html$Html$Events$onClick($author$project$Main$GoList)
+						$elm$html$Html$Events$onClick($author$project$Main$GoList),
+						$elm$html$Html$Attributes$class('button')
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Refresh')
+						$elm$html$Html$text('refresh')
 					])),
 				A2(
 				$elm$html$Html$div,
@@ -6719,14 +6731,18 @@ var $author$project$Main$viewList = function (games) {
 										]),
 									_List_fromArray(
 										[
-											$elm$html$Html$text('Starts: ' + g.start_time)
+											$elm$html$Html$text('starts: ' + g.start_time)
 										])),
 									A2(
 									$elm$html$Html$div,
-									_List_Nil,
 									_List_fromArray(
 										[
-											$elm$html$Html$text('Status: ' + g.status)
+											$elm$html$Html$Attributes$class('muted')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text(
+											'status: ' + $elm$core$String$toLower(g.status))
 										])),
 									A2(
 									$elm$html$Html$div,
@@ -6734,7 +6750,7 @@ var $author$project$Main$viewList = function (games) {
 									_List_fromArray(
 										[
 											$elm$html$Html$text(
-											'Pools H/A/D: ' + ($elm$core$String$fromInt(g.home_pool_tokens) + (' / ' + ($elm$core$String$fromInt(g.away_pool_tokens) + (' / ' + $elm$core$String$fromInt(g.draw_pool_tokens))))))
+											'pools h/a/d: ' + ($elm$core$String$fromInt(g.home_pool_tokens) + (' / ' + ($elm$core$String$fromInt(g.away_pool_tokens) + (' / ' + $elm$core$String$fromInt(g.draw_pool_tokens))))))
 										])),
 									A2(
 									$elm$html$Html$div,
@@ -6742,7 +6758,7 @@ var $author$project$Main$viewList = function (games) {
 									_List_fromArray(
 										[
 											$elm$html$Html$text(
-											'Implied odds H/A/D: ' + ($author$project$Main$pct(g.home_odds) + (' / ' + ($author$project$Main$pct(g.away_odds) + (' / ' + $author$project$Main$pct(g.draw_odds))))))
+											'implied odds h/a/d: ' + ($author$project$Main$pct(g.home_odds) + (' / ' + ($author$project$Main$pct(g.away_odds) + (' / ' + $author$project$Main$pct(g.draw_odds))))))
 										])),
 									A2(
 									$elm$html$Html$button,
@@ -6750,11 +6766,12 @@ var $author$project$Main$viewList = function (games) {
 										[
 											$elm$html$Html$Events$onClick(
 											$author$project$Main$GoDetail(g.id)),
-											A2($elm$html$Html$Attributes$style, 'margin-top', '6px')
+											A2($elm$html$Html$Attributes$style, 'margin-top', '6px'),
+											$elm$html$Html$Attributes$class('button')
 										]),
 									_List_fromArray(
 										[
-											$elm$html$Html$text('Open')
+											$elm$html$Html$text('open')
 										]))
 								]));
 					},
@@ -6772,7 +6789,18 @@ var $author$project$Main$view = function (model) {
 				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$text('IMPredict (tokens only • demo)')
+						$elm$html$Html$text('bet me if you can (demo)')
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('muted'),
+						A2($elm$html$Html$Attributes$style, 'margin-bottom', '8px')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('bet me if you can • demo')
 					])),
 				function () {
 				var _v0 = model.error;

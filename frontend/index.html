@@ -1,19 +1,134 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>IMPredict (Elm)</title>
+  <title>bet me if you can</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Merriweather:wght@700&display=swap" rel="stylesheet">
     <style>
-      body { font-family: system-ui, sans-serif; margin: 20px; }
-      .card { border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin: 8px 0; }
-      button { padding: 6px 10px; }
-      .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-      .muted { color: #666; font-size: 0.9em; }
+      :root{
+        --bg-1: #0f1724; /* deep navy */
+        --bg-2: linear-gradient(135deg,#081427 0%, #0f1724 40%, #102a43 100%);
+        --accent: #7c5cff; /* violet accent */
+        --accent-2: #00d4ff; /* cyan accent */
+        --muted: #98a3b3;
+        --card-bg: rgba(255,255,255,0.03);
+        --glass: rgba(255,255,255,0.04);
+        --radius: 14px;
+      }
+
+      html,body{height:100%;}
+      body{
+        margin:0; padding:0; min-height:100%;
+        font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        background: var(--bg-2);
+        color: #e6eef8;
+        -webkit-font-smoothing:antialiased;
+        -moz-osx-font-smoothing:grayscale;
+      }
+
+      /* subtle painterly background */
+      body::before{
+        content:'';
+        position:fixed; inset:0; z-index:0;
+        background-image: radial-gradient(circle at 10% 10%, rgba(124,92,255,0.08), transparent 8%),
+                          radial-gradient(circle at 90% 80%, rgba(0,212,255,0.06), transparent 12%);
+        pointer-events:none;
+      }
+
+      .page{
+        position:relative; z-index:1; max-width:1200px; margin:36px auto; padding:28px;
+        display:grid; gap:20px; grid-template-columns: 260px 1fr; align-items:start;
+      }
+
+      header.site-header{
+        grid-column: 1 / -1; display:flex; align-items:center; gap:16px;
+        margin-bottom:6px;
+      }
+  .logo {
+        width:56px; height:56px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+        background: linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow: 0 6px 18px rgba(12,18,30,0.6);
+        font-weight:800; font-family:'Merriweather', serif; color:#021124; font-size:20px;
+  }
+  h1{ margin:0; font-size:20px; font-weight:700; text-transform:none; }
+      .subtitle{ color:var(--muted); font-size:0.95rem; }
+
+      aside.sidebar{
+        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        border-radius: var(--radius); padding:18px; box-shadow: 0 6px 24px rgba(2,6,23,0.5);
+        min-height: 260px;
+      }
+      .card{ background:var(--card-bg); border-radius:12px; padding:12px; margin-bottom:12px; border:1px solid rgba(255,255,255,0.03); }
+      .muted{ color:var(--muted); }
+
+      main.content{
+        background: linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.01));
+        padding:18px; border-radius:var(--radius); box-shadow: 0 6px 28px rgba(2,6,23,0.5);
+        min-height: 60vh; overflow:auto;
+      }
+
+      .chunks{ display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+      .chunk{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02)); border-radius:12px; padding:12px; }
+
+      footer.site-footer{ grid-column:1 / -1; text-align:center; color:var(--muted); font-size:0.85rem; padding-top:6px; }
+
+      /* responsive tweaks */
+      @media (max-width: 860px){ .page{ grid-template-columns: 1fr; padding:18px; } aside.sidebar{ order:2 } main.content{ order:1 } }
+
+      a.button{ display:inline-block; padding:8px 12px; border-radius:10px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#041226; font-weight:600; text-decoration:none; }
     </style>
   </head>
   <body>
-    <div id="app"></div>
+    <div class="page">
+      <header class="site-header">
+        <div class="logo">bet</div>
+          <div>
+            <h1>bet me if you can</h1>
+          <div class="subtitle">A tiny live betting demo — Elm frontend + Go backend</div>
+        </div>
+      </header>
+
+      <aside class="sidebar">
+        <div class="card">
+          <strong>Quick actions</strong>
+          <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+            <a class="button" href="/">Open App</a>
+            <a class="button" href="/api/games" style="background:transparent; color:var(--accent); border:1px solid rgba(124,92,255,0.16);">Games JSON</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="muted">About</div>
+          <div style="margin-top:8px; font-size:0.95rem;">This page mounts an Elm app into the area on the right. Refresh after building Elm.</div>
+        </div>
+
+        <div class="card">
+          <div class="muted">Tips</div>
+          <ul style="margin:6px 0 0 18px; color:var(--muted);">
+            <li>Run `go run ./backend` to start the server</li>
+            <li>Elm edits require `elm make` to regenerate `src/Main.js`</li>
+          </ul>
+        </div>
+      </aside>
+
+      <main class="content">
+        <div class="chunks">
+          <div class="chunk card"><div class="muted">Your Wallet</div><h2 style="margin:8px 0 0;">User 1 — $1,000.00</h2></div>
+          <div class="chunk card"><div class="muted">Upcoming</div><div style="margin-top:8px;">Flag Football • Dorm A vs Dorm B</div></div>
+          <div class="chunk card"><div class="muted">Odds</div><div style="margin-top:8px;">Home 50% · Away 50% · Draw 0%</div></div>
+        </div>
+
+        <div style="margin-top:18px;">
+          <!-- Elm app mounts here -->
+          <div id="app"></div>
+        </div>
+      </main>
+
+  <footer class="site-footer">Made for demo — <strong>bet me if you can</strong>. Data is in-memory. Admin key: <code style="color:var(--accent)">letmein</code></footer>
+    </div>
+
     <script src="src/Main.js"></script>
     <script>var app = Elm.Main.init({ node: document.getElementById('app') });</script>
   </body>
