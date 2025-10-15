@@ -1,9 +1,8 @@
-package main
+package handler
 
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -238,16 +237,33 @@ func addOdds(g *Game) {
 
 var st = newStore()
 
-func main() {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/api/games", handleGames)
-	mux.HandleFunc("/api/games/", handleGameByID)
-	mux.Handle("/", http.FileServer(http.Dir("../frontend")))
+// ---------------- Vercel entry (single function) ----------------
 
-	addr := ":8080"
-	log.Println("listening on", addr)
-	log.Fatal(http.ListenAndServe(addr, allowCORS(mux)))
+func Handler(w http.ResponseWriter, r *http.Request) {
+	// CORS + dispatch using the original path passed via rewrite (?path=...)
+	allowCORS(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		rel := strings.TrimPrefix(r.URL.Query().Get("path"), "/") // e.g., "games", "games/101/bets"
+		switch {
+		case r.Method == http.MethodGet && (rel == "games" || rel == "games/"):
+			handleGames(w, r)
+			return
+
+		case strings.HasPrefix(rel, "games/"):
+			rest := strings.TrimPrefix(rel, "games/")
+			// handleGameByID expects URL.Path like /api/games/<rest>
+			r2 := r.Clone(r.Context())
+			r2.URL.Path = "/api/games/" + rest
+			handleGameByID(w, r2)
+			return
+
+		default:
+			http.NotFound(w, r)
+			return
+		}
+	})).ServeHTTP(w, r)
 }
+
+// ---------------- helpers & handlers ----------------
 
 func allowCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

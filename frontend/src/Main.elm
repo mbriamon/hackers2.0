@@ -8,13 +8,12 @@ import Html.Events exposing (onClick, onInput)
 import Http
 import Json.Decode as D
 import Json.Encode as E
+import List
 
-
--- CONFIG
 
 apiBase : String
 apiBase =
-    "http://localhost:8080"
+    ""   -- use same-origin; works in vercel dev and on the deployed site
 
 
 -- TYPES

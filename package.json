@@ -1,0 +1,7 @@
+{
+  "name": "hackers2-elm-go",
+  "private": true,
+  "scripts": {
+    "build": "npx elm@0.19.1-5 make frontend/src/Main.elm --optimize --output=public/elm.js"
+  }
+}
