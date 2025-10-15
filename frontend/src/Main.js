@@ -6285,7 +6285,7 @@ var $author$project$Main$update = F2(
 				if (msg.a.$ === 'Ok') {
 					var g = msg.a.a;
 					return _Utils_Tuple2(
-						_Utils_update(
+						r(
 							model,
 							{
 								selected: $elm$core$Maybe$Just(g)

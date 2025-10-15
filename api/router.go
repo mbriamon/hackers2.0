@@ -327,7 +327,11 @@ func handleGameByID(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		writeJSON(w, http.StatusOK, map[string]any{"bet": b, "wallet": wlt, "game": g})
+
+		// >>> CHANGE #1: compute fresh odds in the response
+		gc := *g
+		addOdds(&gc)
+		writeJSON(w, http.StatusOK, map[string]any{"bet": b, "wallet": wlt, "game": &gc})
 		return
 	}
 
@@ -345,7 +349,11 @@ func handleGameByID(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusForbidden)
 			return
 		}
-		writeJSON(w, http.StatusOK, g)
+
+		// >>> CHANGE #2: compute fresh odds in the response
+		gc := *g
+		addOdds(&gc)
+		writeJSON(w, http.StatusOK, &gc)
 		return
 	}
 
