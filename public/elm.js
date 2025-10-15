@@ -600,11 +600,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region._.J === region.ah.J)
+	if (region._.L === region.ah.L)
 	{
-		return 'on line ' + region._.J;
+		return 'on line ' + region._.L;
 	}
-	return 'on lines ' + region._.J + ' through ' + region.ah.J;
+	return 'on lines ' + region._.L + ' through ' + region.ah.L;
 }
 
 
@@ -4384,13 +4384,13 @@ var _Http_toTask = F3(function(router, toTask, request)
 	return _Scheduler_binding(function(callback)
 	{
 		function done(response) {
-			callback(toTask(request.U.a(response)));
+			callback(toTask(request.V.a(response)));
 		}
 
 		var xhr = new XMLHttpRequest();
 		xhr.addEventListener('error', function() { done($elm$http$Http$NetworkError_); });
 		xhr.addEventListener('timeout', function() { done($elm$http$Http$Timeout_); });
-		xhr.addEventListener('load', function() { done(_Http_toResponse(request.U.b, xhr)); });
+		xhr.addEventListener('load', function() { done(_Http_toResponse(request.V.b, xhr)); });
 		$elm$core$Maybe$isJust(request.a5) && _Http_track(router, xhr, request.a5.a);
 
 		try {
@@ -4418,7 +4418,7 @@ function _Http_configureRequest(xhr, request)
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
 	xhr.timeout = request.a3.a || 0;
-	xhr.responseType = request.U.d;
+	xhr.responseType = request.V.d;
 	xhr.withCredentials = request.aJ;
 }
 
@@ -5965,7 +5965,7 @@ var $author$project$Main$gameDecoder = A2(
 				function (hp, ap, dp, ho, ao, d0) {
 					return _Utils_update(
 						partial,
-						{D: ao, E: ap, F: d0, G: dp, H: ho, I: hp});
+						{E: ao, F: ap, G: d0, H: dp, I: ho, J: hp});
 				}),
 			A2($elm$json$Json$Decode$field, 'home_pool_tokens', $elm$json$Json$Decode$int),
 			A2($elm$json$Json$Decode$field, 'away_pool_tokens', $elm$json$Json$Decode$int),
@@ -5978,7 +5978,7 @@ var $author$project$Main$gameDecoder = A2(
 		$elm$json$Json$Decode$map6,
 		F6(
 			function (id, sport, home, away, start, status) {
-				return {P: away, D: 0, E: 0, F: 0, G: 0, R: home, H: 0, I: 0, V: id, S: sport, aa: start, T: status};
+				return {R: away, E: 0, F: 0, G: 0, H: 0, S: home, I: 0, J: 0, K: id, T: sport, aa: start, U: status};
 			}),
 		A2($elm$json$Json$Decode$field, 'id', $elm$json$Json$Decode$int),
 		A2($elm$json$Json$Decode$field, 'sport', $elm$json$Json$Decode$string),
@@ -6125,7 +6125,7 @@ var $elm$http$Http$cmdMap = F2(
 				{
 					aJ: r.aJ,
 					aL: r.aL,
-					U: A2(_Http_mapExpect, func, r.U),
+					V: A2(_Http_mapExpect, func, r.V),
 					aQ: r.aQ,
 					aU: r.aU,
 					a3: r.a3,
@@ -6153,23 +6153,23 @@ var $elm$http$Http$subscription = _Platform_leaf('Http');
 var $elm$http$Http$request = function (r) {
 	return $elm$http$Http$command(
 		$elm$http$Http$Request(
-			{aJ: false, aL: r.aL, U: r.U, aQ: r.aQ, aU: r.aU, a3: r.a3, a5: r.a5, ac: r.ac}));
+			{aJ: false, aL: r.aL, V: r.V, aQ: r.aQ, aU: r.aU, a3: r.a3, a5: r.a5, ac: r.ac}));
 };
 var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
-		{aL: $elm$http$Http$emptyBody, U: r.U, aQ: _List_Nil, aU: 'GET', a3: $elm$core$Maybe$Nothing, a5: $elm$core$Maybe$Nothing, ac: r.ac});
+		{aL: $elm$http$Http$emptyBody, V: r.V, aQ: _List_Nil, aU: 'GET', a3: $elm$core$Maybe$Nothing, a5: $elm$core$Maybe$Nothing, ac: r.ac});
 };
 var $elm$json$Json$Decode$list = _Json_decodeList;
 var $author$project$Main$fetchGames = $elm$http$Http$get(
 	{
-		U: A2(
+		V: A2(
 			$elm$http$Http$expectJson,
 			$author$project$Main$GotGames,
 			$elm$json$Json$Decode$list($author$project$Main$gameDecoder)),
 		ac: $author$project$Main$apiBase + '/api/games'
 	});
 var $author$project$Main$ListPage = {$: 0};
-var $author$project$Main$initModel = {r: $elm$core$Maybe$Nothing, Q: _List_Nil, t: $author$project$Main$ListPage, w: $elm$core$Maybe$Nothing, x: 'home', K: '10', ad: 1};
+var $author$project$Main$initModel = {s: $elm$core$Maybe$Nothing, z: _List_Nil, A: $author$project$Main$ListPage, q: $elm$core$Maybe$Nothing, w: 'home', M: '10', ad: 1};
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $author$project$Main$BetDone = function (a) {
@@ -6178,6 +6178,7 @@ var $author$project$Main$BetDone = function (a) {
 var $author$project$Main$DetailPage = function (a) {
 	return {$: 1, a: a};
 };
+var $author$project$Main$betResponseDecoder = A2($elm$json$Json$Decode$field, 'game', $author$project$Main$gameDecoder);
 var $author$project$Main$errToString = function (e) {
 	switch (e.$) {
 		case 0:
@@ -6194,30 +6195,13 @@ var $author$project$Main$errToString = function (e) {
 			return 'Bad body';
 	}
 };
-var $elm$http$Http$expectBytesResponse = F2(
-	function (toMsg, toResult) {
-		return A3(
-			_Http_expect,
-			'arraybuffer',
-			_Http_toDataView,
-			A2($elm$core$Basics$composeR, toResult, toMsg));
-	});
-var $elm$http$Http$expectWhatever = function (toMsg) {
-	return A2(
-		$elm$http$Http$expectBytesResponse,
-		toMsg,
-		$elm$http$Http$resolve(
-			function (_v0) {
-				return $elm$core$Result$Ok(0);
-			}));
-};
 var $author$project$Main$GotGame = function (a) {
 	return {$: 1, a: a};
 };
 var $author$project$Main$fetchGame = function (gid) {
 	return $elm$http$Http$get(
 		{
-			U: A2($elm$http$Http$expectJson, $author$project$Main$GotGame, $author$project$Main$gameDecoder),
+			V: A2($elm$http$Http$expectJson, $author$project$Main$GotGame, $author$project$Main$gameDecoder),
 			ac: $author$project$Main$apiBase + ('/api/games/' + $elm$core$String$fromInt(gid))
 		});
 };
@@ -6262,7 +6246,7 @@ var $author$project$Main$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{Q: gs}),
+							{z: gs}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					var e = msg.a.a;
@@ -6270,7 +6254,7 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								r: $elm$core$Maybe$Just(
+								s: $elm$core$Maybe$Just(
 									$author$project$Main$errToString(e))
 							}),
 						$elm$core$Platform$Cmd$none);
@@ -6282,7 +6266,7 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								w: $elm$core$Maybe$Just(g)
+								q: $elm$core$Maybe$Just(g)
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
@@ -6291,7 +6275,7 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								r: $elm$core$Maybe$Just(
+								s: $elm$core$Maybe$Just(
 									$author$project$Main$errToString(e))
 							}),
 						$elm$core$Platform$Cmd$none);
@@ -6300,7 +6284,7 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{t: $author$project$Main$ListPage, w: $elm$core$Maybe$Nothing}),
+						{A: $author$project$Main$ListPage, q: $elm$core$Maybe$Nothing}),
 					$author$project$Main$fetchGames);
 			case 3:
 				var gid = msg.a;
@@ -6308,8 +6292,8 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							t: $author$project$Main$DetailPage(gid),
-							w: $elm$core$Maybe$Nothing
+							A: $author$project$Main$DetailPage(gid),
+							q: $elm$core$Maybe$Nothing
 						}),
 					$author$project$Main$fetchGame(gid));
 			case 4:
@@ -6317,23 +6301,23 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{K: s}),
+						{M: s}),
 					$elm$core$Platform$Cmd$none);
 			case 5:
 				var s = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{x: s}),
+						{w: s}),
 					$elm$core$Platform$Cmd$none);
 			case 6:
-				var _v1 = _Utils_Tuple2(model.t, model.w);
+				var _v1 = _Utils_Tuple2(model.A, model.q);
 				if ((_v1.a.$ === 1) && (!_v1.b.$)) {
 					var gid = _v1.a.a;
 					var stakeInt = A2(
 						$elm$core$Maybe$withDefault,
 						0,
-						$elm$core$String$toInt(model.K));
+						$elm$core$String$toInt(model.M));
 					var body = $elm$json$Json$Encode$object(
 						_List_fromArray(
 							[
@@ -6342,7 +6326,7 @@ var $author$project$Main$update = F2(
 								$elm$json$Json$Encode$int(model.ad)),
 								_Utils_Tuple2(
 								'selection',
-								$elm$json$Json$Encode$string(model.x)),
+								$elm$json$Json$Encode$string(model.w)),
 								_Utils_Tuple2(
 								'stake',
 								$elm$json$Json$Encode$int(stakeInt))
@@ -6352,11 +6336,7 @@ var $author$project$Main$update = F2(
 						$elm$http$Http$request(
 							{
 								aL: $elm$http$Http$jsonBody(body),
-								U: $elm$http$Http$expectWhatever(
-									function (_v2) {
-										return $author$project$Main$BetDone(
-											$elm$core$Result$Ok(0));
-									}),
+								V: A2($elm$http$Http$expectJson, $author$project$Main$BetDone, $author$project$Main$betResponseDecoder),
 								aQ: _List_Nil,
 								aU: 'POST',
 								a3: $elm$core$Maybe$Nothing,
@@ -6368,22 +6348,27 @@ var $author$project$Main$update = F2(
 				}
 			case 7:
 				if (!msg.a.$) {
-					var _v3 = model.t;
-					if (_v3.$ === 1) {
-						var gid = _v3.a;
-						return _Utils_Tuple2(
+					var updatedGame = msg.a.a;
+					return _Utils_Tuple2(
+						_Utils_update(
 							model,
-							$author$project$Main$fetchGame(gid));
-					} else {
-						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-					}
+							{
+								z: A2(
+									$elm$core$List$map,
+									function (g) {
+										return _Utils_eq(g.K, updatedGame.K) ? updatedGame : g;
+									},
+									model.z),
+								q: $elm$core$Maybe$Just(updatedGame)
+							}),
+						$elm$core$Platform$Cmd$none);
 				} else {
 					var e = msg.a.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								r: $elm$core$Maybe$Just(
+								s: $elm$core$Maybe$Just(
 									$author$project$Main$errToString(e))
 							}),
 						$elm$core$Platform$Cmd$none);
@@ -6392,7 +6377,7 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{r: $elm$core$Maybe$Nothing}),
+						{s: $elm$core$Maybe$Nothing}),
 					$elm$core$Platform$Cmd$none);
 		}
 	});
@@ -6494,7 +6479,7 @@ var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$Main$viewDetail = F2(
 	function (gid, model) {
-		var _v0 = model.w;
+		var _v0 = model.q;
 		if (_v0.$ === 1) {
 			return A2(
 				$elm$html$Html$div,
@@ -6537,7 +6522,7 @@ var $author$project$Main$viewDetail = F2(
 						_List_Nil,
 						_List_fromArray(
 							[
-								$elm$html$Html$text(g.S + (': ' + (g.R + (' vs ' + g.P))))
+								$elm$html$Html$text(g.T + (': ' + (g.S + (' vs ' + g.R))))
 							])),
 						A2(
 						$elm$html$Html$div,
@@ -6548,7 +6533,7 @@ var $author$project$Main$viewDetail = F2(
 						_List_fromArray(
 							[
 								$elm$html$Html$text(
-								'status: ' + $elm$core$String$toLower(g.T))
+								'status: ' + $elm$core$String$toLower(g.U))
 							])),
 						A2(
 						$elm$html$Html$div,
@@ -6556,7 +6541,7 @@ var $author$project$Main$viewDetail = F2(
 						_List_fromArray(
 							[
 								$elm$html$Html$text(
-								'pools h/a/d: ' + ($elm$core$String$fromInt(g.I) + (' / ' + ($elm$core$String$fromInt(g.E) + (' / ' + $elm$core$String$fromInt(g.G))))))
+								'pools h/a/d: ' + ($elm$core$String$fromInt(g.J) + (' / ' + ($elm$core$String$fromInt(g.F) + (' / ' + $elm$core$String$fromInt(g.H))))))
 							])),
 						A2(
 						$elm$html$Html$div,
@@ -6564,7 +6549,7 @@ var $author$project$Main$viewDetail = F2(
 						_List_fromArray(
 							[
 								$elm$html$Html$text(
-								'implied odds h/a/d: ' + ($author$project$Main$pct(g.H) + (' / ' + ($author$project$Main$pct(g.D) + (' / ' + $author$project$Main$pct(g.F))))))
+								'implied odds h/a/d: ' + ($author$project$Main$pct(g.I) + (' / ' + ($author$project$Main$pct(g.E) + (' / ' + $author$project$Main$pct(g.G))))))
 							])),
 						A2(
 						$elm$html$Html$div,
@@ -6595,7 +6580,7 @@ var $author$project$Main$viewDetail = F2(
 										_List_fromArray(
 											[
 												$elm$html$Html$Attributes$value('home'),
-												$elm$html$Html$Attributes$selected(model.x === 'home')
+												$elm$html$Html$Attributes$selected(model.w === 'home')
 											]),
 										_List_fromArray(
 											[
@@ -6606,7 +6591,7 @@ var $author$project$Main$viewDetail = F2(
 										_List_fromArray(
 											[
 												$elm$html$Html$Attributes$value('away'),
-												$elm$html$Html$Attributes$selected(model.x === 'away')
+												$elm$html$Html$Attributes$selected(model.w === 'away')
 											]),
 										_List_fromArray(
 											[
@@ -6617,7 +6602,7 @@ var $author$project$Main$viewDetail = F2(
 										_List_fromArray(
 											[
 												$elm$html$Html$Attributes$value('draw'),
-												$elm$html$Html$Attributes$selected(model.x === 'draw')
+												$elm$html$Html$Attributes$selected(model.w === 'draw')
 											]),
 										_List_fromArray(
 											[
@@ -6639,7 +6624,7 @@ var $author$project$Main$viewDetail = F2(
 								_List_fromArray(
 									[
 										$elm$html$Html$Attributes$type_('number'),
-										$elm$html$Html$Attributes$value(model.K),
+										$elm$html$Html$Attributes$value(model.M),
 										$elm$html$Html$Events$onInput($author$project$Main$SetStake),
 										$elm$html$Html$Attributes$min('1'),
 										A2($elm$html$Html$Attributes$style, 'margin-left', '6px'),
@@ -6714,7 +6699,7 @@ var $author$project$Main$viewList = function (games) {
 											_List_Nil,
 											_List_fromArray(
 												[
-													$elm$html$Html$text(g.S + (': ' + (g.R + (' vs ' + g.P))))
+													$elm$html$Html$text(g.T + (': ' + (g.S + (' vs ' + g.R))))
 												]))
 										])),
 									A2(
@@ -6736,7 +6721,7 @@ var $author$project$Main$viewList = function (games) {
 									_List_fromArray(
 										[
 											$elm$html$Html$text(
-											'status: ' + $elm$core$String$toLower(g.T))
+											'status: ' + $elm$core$String$toLower(g.U))
 										])),
 									A2(
 									$elm$html$Html$div,
@@ -6744,7 +6729,7 @@ var $author$project$Main$viewList = function (games) {
 									_List_fromArray(
 										[
 											$elm$html$Html$text(
-											'pools h/a/d: ' + ($elm$core$String$fromInt(g.I) + (' / ' + ($elm$core$String$fromInt(g.E) + (' / ' + $elm$core$String$fromInt(g.G))))))
+											'pools h/a/d: ' + ($elm$core$String$fromInt(g.J) + (' / ' + ($elm$core$String$fromInt(g.F) + (' / ' + $elm$core$String$fromInt(g.H))))))
 										])),
 									A2(
 									$elm$html$Html$div,
@@ -6752,14 +6737,14 @@ var $author$project$Main$viewList = function (games) {
 									_List_fromArray(
 										[
 											$elm$html$Html$text(
-											'implied odds h/a/d: ' + ($author$project$Main$pct(g.H) + (' / ' + ($author$project$Main$pct(g.D) + (' / ' + $author$project$Main$pct(g.F))))))
+											'implied odds h/a/d: ' + ($author$project$Main$pct(g.I) + (' / ' + ($author$project$Main$pct(g.E) + (' / ' + $author$project$Main$pct(g.G))))))
 										])),
 									A2(
 									$elm$html$Html$button,
 									_List_fromArray(
 										[
 											$elm$html$Html$Events$onClick(
-											$author$project$Main$GoDetail(g.V)),
+											$author$project$Main$GoDetail(g.K)),
 											A2($elm$html$Html$Attributes$style, 'margin-top', '6px'),
 											$elm$html$Html$Attributes$class('button')
 										]),
@@ -6797,7 +6782,7 @@ var $author$project$Main$view = function (model) {
 						$elm$html$Html$text('bet me if you can • demo')
 					])),
 				function () {
-				var _v0 = model.r;
+				var _v0 = model.s;
 				if (!_v0.$) {
 					var e = _v0.a;
 					return A2(
@@ -6826,9 +6811,9 @@ var $author$project$Main$view = function (model) {
 				}
 			}(),
 				function () {
-				var _v1 = model.t;
+				var _v1 = model.A;
 				if (!_v1.$) {
-					return $author$project$Main$viewList(model.Q);
+					return $author$project$Main$viewList(model.z);
 				} else {
 					var gid = _v1.a;
 					return A2($author$project$Main$viewDetail, gid, model);

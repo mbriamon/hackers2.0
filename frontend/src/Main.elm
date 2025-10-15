@@ -55,7 +55,7 @@ type Msg
     | SetStake String
     | SetSelection String
     | PlaceBet
-    | BetDone (Result Http.Error ())
+    | BetDone (Result Http.Error Game)
     | ClearError
 
 
@@ -131,7 +131,7 @@ update msg model =
                         , headers = []
                         , url = apiBase ++ "/api/games/" ++ String.fromInt gid ++ "/bets"
                         , body = Http.jsonBody body
-                        , expect = Http.expectWhatever (\_ -> BetDone (Ok ()))
+                        , expect = Http.expectJson BetDone betResponseDecoder
                         , timeout = Nothing
                         , tracker = Nothing
                         }
@@ -140,16 +140,18 @@ update msg model =
                 _ ->
                     ( model, Cmd.none )
 
-        BetDone (Ok _) ->
-            case model.page of
-                DetailPage gid ->
-                    ( model, fetchGame gid )
 
-                _ ->
-                    ( model, Cmd.none )
+        BetDone (Ok updatedGame) ->
+            ( { model
+                | selected = Just updatedGame
+                , games = List.map (\g -> if g.id == updatedGame.id then updatedGame else g) model.games
+            }
+            , Cmd.none
+            )
 
         BetDone (Err e) ->
             ( { model | error = Just (errToString e) }, Cmd.none )
+
 
         ClearError ->
             ( { model | error = Nothing }, Cmd.none )
@@ -220,6 +222,10 @@ gameDecoder =
                     (D.field "away_odds" D.float)
                     (D.field "draw_odds" D.float)
             )
+    
+betResponseDecoder : D.Decoder Game
+betResponseDecoder =
+    D.field "game" gameDecoder
 
 
 -- VIEW
